@@ -3,8 +3,12 @@ package org.arpit.java2blog;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.arpit.java2blog.model.Student;
 import org.arpit.java2blog.service.StudentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,16 +17,24 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SpringBootJdbcExampleApplication implements CommandLineRunner{
 
+	public static Logger LOGGER = LoggerFactory.getLogger(SpringBootJdbcExampleApplication.class);
+	
+	@PostConstruct
+	public void init()
+	{
+		LOGGER.info("Application started in INIT...");
+	}
 	@Autowired
 	StudentService studentService;
 	
 	public static void main(String[] args) {
+		LOGGER.info("Main application started");
 		SpringApplication.run(SpringBootJdbcExampleApplication.class, args);
 	}
 
 	@Override
     public void run(String... args) {
-        System.out.println("StartApplication...");
+		LOGGER.info("StartApplication...");
         testStudentData();
     }
 
@@ -37,30 +49,30 @@ public class SpringBootJdbcExampleApplication implements CommandLineRunner{
 
         System.out.println("[SAVE]");
         students.forEach(student -> {
-            System.out.println("Saving student with name: "+student.getStudentName() );
+        	LOGGER.info("Saving student with name: "+student.getStudentName() );
             studentService.save(student);
         });
 
         // find all
-        System.out.println("get All students: "+studentService.findAll());
+        LOGGER.info("get All students: "+studentService.findAll());
 
         // find by id
-        System.out.println("Find Student with id 2");
+        LOGGER.info("Find Student with id 2");
         Student student = studentService.findById(2L).orElseThrow(IllegalArgumentException::new);
-        System.out.println("Student with id 2: "+student);
+        LOGGER.info("Student with id 2: "+student);
 
         // update
-        System.out.println("Update age of Martin to 19");
+        LOGGER.info("Update age of Martin to 19");
         student.setAge(19);
         student.setStudentId(2);
-        System.out.println("Rows affected: "+studentService.update(student));
+        LOGGER.info("Rows affected: "+studentService.update(student));
 
         // delete
-        System.out.println("Delete Student with id 4");
-        System.out.println("Rows affected: "+ studentService.deleteById(4));
+        LOGGER.info("Delete Student with id 4");
+        LOGGER.info("Rows affected: "+ studentService.deleteById(4));
 
         // find all
-        System.out.println("get updated list of Students: "+studentService.findAll());
+        LOGGER.info("get updated list of Students: "+studentService.findAll());
 
     }
 }

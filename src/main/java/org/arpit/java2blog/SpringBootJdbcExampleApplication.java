@@ -35,7 +35,7 @@ public class SpringBootJdbcExampleApplication implements CommandLineRunner{
 	@Override
     public void run(String... args) {
 		LOGGER.info("StartApplication...");
-        testStudentData();
+       // testStudentData();
     }
 
     void testStudentData() {
